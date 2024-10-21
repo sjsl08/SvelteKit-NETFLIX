@@ -1,5 +1,5 @@
 // src/lib/actions/debounceAction.ts
-export function debounce(node: HTMLElement, params: { delay: number, callback: (event: MouseEvent) => void }) {
+export const debounce=(node: HTMLElement, params: { delay: number, callback: (event: MouseEvent) => void })=> {
     let timeout: number | undefined;
   
     const handleEvent = (event: MouseEvent) => {

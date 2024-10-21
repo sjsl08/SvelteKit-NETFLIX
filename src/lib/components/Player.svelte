@@ -151,7 +151,7 @@
 
   /* Custom Plyr variables to style the player */
   :root {
-    --plyr-color-main: #ff0000;
+    --plyr-color-main: #ff000078;
     --plyr-video-background: rgba(0, 0, 0, 1);
     --plyr-focus-visible-color: #00b3ff;
     --plyr-badge-background: #4a5464;
@@ -168,7 +168,7 @@
     );
     --plyr-video-control-color: #ffffff;
     --plyr-video-control-color-hover: #ff0000;
-    --plyr-video-control-background-hover: #ff0000;
+    --plyr-video-control-background-hover: #ffffff;
     --plyr-menu-background: rgba(255, 255, 255, 0.9);
     --plyr-menu-color: #000000;
     --plyr-tooltip-background: rgba(255, 255, 255, 0.9);

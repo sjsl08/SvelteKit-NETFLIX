@@ -6,7 +6,7 @@ const API_KEY = '920a7b538bfb15120fe9dc6ced7735b0';  // Replace with your actual
 const BASE_URL = 'https://api.themoviedb.org/3';
 
 // TMDB Configuration
-export async function getTMDBConfig(fetch: (url: string) => Promise<Response>): Promise<TMDBConfig | null> {
+export const getTMDBConfig = async (fetch: (url: string) => Promise<Response>): Promise<TMDBConfig | null> => {
     const url = `${BASE_URL}/configuration?api_key=${API_KEY}`;
     try {
         const response = await fetch(url);
@@ -19,11 +19,11 @@ export async function getTMDBConfig(fetch: (url: string) => Promise<Response>): 
         console.error('Error in getTMDBConfig:', error);
         return null;
     }
-}
+};
 
 // Movies
 
-export async function fetchPopularShows(fetch: (url: string) => Promise<Response>): Promise<MediaItem[]> {
+export const fetchPopularShows = async (fetch: (url: string) => Promise<Response>): Promise<MediaItem[]> => {
     const url = `${BASE_URL}/movie/popular?api_key=${API_KEY}`;
     try {
         const response = await fetch(url);
@@ -41,9 +41,9 @@ export async function fetchPopularShows(fetch: (url: string) => Promise<Response
         console.error('Error in fetchPopularShows:', error);
         return [];
     }
-}
+};
 
-export async function fetchTrendingShows(fetch: (url: string) => Promise<Response>): Promise<MediaItem[]> {
+export const fetchTrendingShows = async (fetch: (url: string) => Promise<Response>): Promise<MediaItem[]> => {
     const url = `${BASE_URL}/trending/movie/week?api_key=${API_KEY}`;
     try {
         const response = await fetch(url);
@@ -61,9 +61,9 @@ export async function fetchTrendingShows(fetch: (url: string) => Promise<Respons
         console.error('Error in fetchTrendingShows:', error);
         return [];
     }
-}
+};
 
-export async function fetchTopRatedShows(fetch: (url: string) => Promise<Response>): Promise<MediaItem[]> {
+export const fetchTopRatedShows = async (fetch: (url: string) => Promise<Response>): Promise<MediaItem[]> => {
     const url = `${BASE_URL}/movie/top_rated?api_key=${API_KEY}`;
     try {
         const response = await fetch(url);
@@ -81,9 +81,9 @@ export async function fetchTopRatedShows(fetch: (url: string) => Promise<Respons
         console.error('Error in fetchTopRatedShows:', error);
         return [];
     }
-}
+};
 
-export async function getGenres(fetch: (url: string) => Promise<Response>): Promise<Genre[] | null> {
+export const getGenres = async (fetch: (url: string) => Promise<Response>): Promise<Genre[] | null> => {
     const url = `${BASE_URL}/genre/movie/list?api_key=${API_KEY}`;
     try {
         const response = await fetch(url);
@@ -96,9 +96,12 @@ export async function getGenres(fetch: (url: string) => Promise<Response>): Prom
         console.error('Error in getGenres:', error);
         return null;
     }
-}
+};
 
-export async function getMoviesByGenre(fetch: (url: string) => Promise<Response>, id: string): Promise<MediaItem[]> {
+export const getMoviesByGenre = async (
+    fetch: (url: string) => Promise<Response>,
+    id: string
+): Promise<MediaItem[]> => {
     const url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${id}&page=1`;
     try {
         const response = await fetch(url);
@@ -116,9 +119,11 @@ export async function getMoviesByGenre(fetch: (url: string) => Promise<Response>
         console.error('Error in getMoviesByGenre:', error);
         return [];
     }
-}
+};
 
-export async function getMovieTrailer( movieId: number | string): Promise<{ key: string } | null> {
+export const getMovieTrailer = async (
+    movieId: number | string
+): Promise<{ key: string } | null> => {
     const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${API_KEY}&language=en-US`;
     try {
         const response = await fetch(url);
@@ -128,7 +133,9 @@ export async function getMovieTrailer( movieId: number | string): Promise<{ key:
         const data = await response.json();
 
         if (data.results && data.results.length > 0) {
-            const trailer = data.results.find((video: { site: string; type: string }) => video.site === 'YouTube' && video.type === 'Trailer');
+            const trailer = data.results.find(
+                (video: { site: string; type: string }) => video.site === 'YouTube' && video.type === 'Trailer'
+            );
             return trailer ? { key: trailer.key } : null;
         }
         return null;
@@ -136,10 +143,12 @@ export async function getMovieTrailer( movieId: number | string): Promise<{ key:
         console.error('Error in getMovieTrailer:', error);
         return null;
     }
-}
+};
 
 // Get Movie by ID
-export async function getMovieById(movieId: string|number): Promise<MovieDetails | null> {
+export const getMovieById = async (
+    movieId: string | number
+): Promise<MovieDetails | null> => {
     const url = `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=en-US`;
     try {
         const response = await fetch(url);
@@ -152,10 +161,12 @@ export async function getMovieById(movieId: string|number): Promise<MovieDetails
         console.error('Error in getMovieById:', error);
         return null;
     }
-}
+};
 
 // Similar Movies
-export async function getSimilarMovies( movieId: number): Promise<MediaItem[]> {
+export const getSimilarMovies = async (
+    movieId: number
+): Promise<MediaItem[]> => {
     const url = `${BASE_URL}/movie/${movieId}/similar?api_key=${API_KEY}&page=1`;
     try {
         const response = await fetch(url);
@@ -173,17 +184,20 @@ export async function getSimilarMovies( movieId: number): Promise<MediaItem[]> {
         console.error('Error in getSimilarMovies:', error);
         return [];
     }
-}
+};
 
 // Search Movies
-export async function searchMovies( keyword: string, page: number = 1): Promise<MediaItem[]> {
+export const searchMovies = async (
+    keyword: string,
+    page: number = 1
+): Promise<MediaItem[]> => {
     if (!keyword.trim()) {
         return [];
     }
 
     const encodedKeyword = encodeURIComponent(keyword.trim());
     const url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodedKeyword}&page=${page}`;
-    
+
     try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -200,4 +214,4 @@ export async function searchMovies( keyword: string, page: number = 1): Promise<
         console.error('Error in searchMovies:', error);
         return [];
     }
-}
+};

@@ -54,25 +54,7 @@
     }
   });
 
-  // Function to fetch the trailer
-  const fetchTrailer= async(movieId: number | string)=> {
-    console.log(x, window.innerWidth);
 
-    try {
-      const trailer = await getMovieTrailer(movieId);
-      // console.log('Fetched Trailer:', trailer);
-      if (trailer && trailer.key) {
-        trailerUrl = `https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=1&controls=0&loop=1&playlist=${trailer.key}`;
-      } else {
-        trailerUrl = "";
-        // console.error('Trailer not found or key is missing.');
-      }
-      // console.log('Trailer URL:', trailerUrl);
-    } catch (error) {
-      // console.error('Error fetching trailer:', error);
-      trailerUrl = "";
-    }
-  }
 
   onMount(async() => {
     if (browser) {
