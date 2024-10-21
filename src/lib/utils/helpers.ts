@@ -3,8 +3,6 @@ import { get } from "svelte/store";
 import fallbackImage from "../../public/images/404.jpg"
 import type { Movie } from "$lib/types/tmdb";
 
-// Define a TypeScript interface for the movie object
-
 
 export const addToList = (movie: Movie) => {
   console.log("Adding movie to list:", movie);

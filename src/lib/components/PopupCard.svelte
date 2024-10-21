@@ -74,17 +74,21 @@
     }
   }
 
-  onMount(() => {
+  onMount(async() => {
     if (browser) {
       // Initial fetch if item exists
       if (cardState && get(cardState).item) {
-        fetchTrailer(get(cardState).item.id);
+       const trailerResponse =  await getMovieTrailer(get(cardState).item.id);
+
+       trailerUrl = trailerResponse.key
       }
 
       // Subscribe to changes in cardState
-      unsubscribe = cardState.subscribe((state) => {
+      unsubscribe = cardState.subscribe(async(state) => {
         if (state.item?.id) {
-          fetchTrailer(state.item.id);
+          const trailerResponse =  await getMovieTrailer(get(cardState).item.id);
+
+       trailerUrl = trailerResponse.key
         } else {
           trailerUrl = "";
         }

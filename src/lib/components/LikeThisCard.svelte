@@ -16,17 +16,6 @@
   export let imageUrl = "path/to/your/image.jpg";
   let added = false;
 
-  const handleAddToList = () => {
-    let data: Movie = {
-      id,
-      poster_path: imageUrl,
-      title,
-      image: `https://image.tmdb.org/t/p/w500${imageUrl}`,
-    };
-
-    addToList(data);
-    added = !added;
-  };
 </script>
 
 <div class="bg-[#181818] text-white rounded-lg shadow-md sm:w-44 w-52">

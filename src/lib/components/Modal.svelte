@@ -17,16 +17,7 @@
   import { goto } from "$app/navigation";
   import type { MovieDetails } from "$lib/types/tmdb";
 
-  // Define TypeScript Interfaces
-  interface Genre {
-    id: number;
-    name: string;
-  }
 
-  interface SpokenLanguage {
-    iso_639_1: string;
-    name: string;
-  }
 
   let isOpen: boolean = false;
   let videoId = "";

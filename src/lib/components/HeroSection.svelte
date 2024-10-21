@@ -10,30 +10,12 @@
   import type PlayerComponent from "./Player.svelte";
   import { openModal } from '$lib/store/globalState';
   import { goto } from "$app/navigation";
+    import type { Movie, MovieDetails } from "../types/tmdb";
+    import { getMovieById, getMovieTrailer } from "../api/tmdb";
 
-  interface Movie {
-    id: number;
-    title?: string;
-    name?: string;
-    poster_path: string;
-    overview: string;
-  }
+ 
 
-  interface Video {
-    key: string;
-    type: string;
-  }
-
-  interface MovieDetails {
-    overview: string;
-    videos: {
-      results: Video[];
-    };
-    title?: string;
-    name?: string;
-    id:string
-  }
-
+ 
   let id: string = "";
   let movie: Movie | null = null;
   let trailerUrl: string = "";
@@ -51,15 +33,7 @@
   let unsubscribeGenres: () => void;
 
   onMount(() => {
-    if (isTvShowsRoute) {
-      unsubscribeShows = popularTVShows.subscribe((shows) => {
-        if (shows.length > 0) {
-          const randomIndex = Math.floor(Math.random() * shows.length);
-          movie = shows[randomIndex];
-          fetchDetailsAndInitializePlayer(movie);
-        }
-      });
-    } else {
+
       unsubscribeShows = popularShows.subscribe((shows) => {
         if (shows.length > 0) {
           const randomIndex = Math.floor(Math.random() * shows.length);
@@ -67,7 +41,7 @@
           fetchDetailsAndInitializePlayer(movie);
         }
       });
-    }
+
 
     // Cleanup subscriptions and destroy player
     return () => {
@@ -77,38 +51,17 @@
   });
 
   const  fetchDetailsAndInitializePlayer = async(selectedMovie: Movie)=> {
-    await fetchDetails(selectedMovie);
+   movieDetails=  await getMovieById(movie.id)
+
+   
+    const trailer= await getMovieTrailer(selectedMovie.id);
+
+    console.log(trailer);
+    
+    trailerUrl = `https://www.youtube.com/embed/${trailer.key}?enablejsapi=1&autoplay=1&loop=1&playlist=${trailer.key}&controls=0&modestbranding=1&iv_load_policy=3&cc_load_policy=0&rel=0&vq=hd2160`;
+
   }
 
-  const fetchDetails= async(selectedMovie: Movie)=> {
-    const apiKey = "920a7b538bfb15120fe9dc6ced7735b0";
-    const url = isTvShowsRoute
-      ? `https://api.themoviedb.org/3/tv/${selectedMovie.id}?api_key=${apiKey}&append_to_response=videos`
-      : `https://api.themoviedb.org/3/movie/${selectedMovie.id}?api_key=${apiKey}&append_to_response=videos`;
-
-    try {
-      const response = await fetch(url);
-      const details: MovieDetails = await response.json();
-      movieDetails = details;
-
-      console.log(movieDetails);
-      
-
-      const trailer = details.videos.results.find(
-        (video) =>
-          video.type === "Trailer" || video.type === "Opening Credits"
-      );
-
-      if (trailer) {
-        id = trailer.key;
-        trailerUrl = `https://www.youtube.com/embed/${trailer.key}?enablejsapi=1&autoplay=1&loop=1&playlist=${trailer.key}&controls=0&modestbranding=1&iv_load_policy=3&cc_load_policy=0&rel=0&vq=hd2160`;
-      } else {
-        trailerUrl = "";
-      }
-    } catch (error) {
-      console.error("Error fetching movie details:", error);
-    }
-  }
 
   const handleMute = () => {
     console.log("Parent: Video has been muted.");
@@ -126,7 +79,7 @@
 <main class="relative overflow-hidden ">
   {#if trailerUrl}
     <Player
-      videoId={id}
+      videoId={trailerUrl}
       bind:this={playerRef}
       on:mute={handleMute}
       on:unmute={handleUnmute}

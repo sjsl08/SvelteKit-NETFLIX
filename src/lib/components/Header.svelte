@@ -3,14 +3,12 @@
   import { onMount } from "svelte";
   import { ChevronRight, Bell, Search, Menu, X } from "lucide-svelte";
   import { page } from "$app/stores";
-  import { cardView } from "$lib/store/globalState";
   import { goto } from "$app/navigation";
 
   let isSticky: boolean = false;
   let darkSubHead: boolean = false;
 
   // Search bar state
-  let selectedGenre: boolean = null;
   let isSearchActive = false;
   let searchInputRef: HTMLInputElement | null = null;
   let searchQuery: string = "";

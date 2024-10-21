@@ -1,6 +1,6 @@
 // src/lib/store.ts
 
-import type { Movie } from "$lib/types/tmdb";
+import type { CardState, ModalState, Movie, MovieDetails, TMDBConfig } from "$lib/types/tmdb";
 import { writable } from "svelte/store";
 import { getMovieById } from "$lib/api/tmdb"; // Import the API function
 
@@ -10,28 +10,20 @@ export const cardView = writable(false);
 
 
 // Configuration store
-export const config = writable<any>({});
+export const config = writable<TMDBConfig|{}>({});
 
 // Movies
-export const moviesWithGenre = writable<any>([]);
+export const moviesWithGenre = writable<Movie[]>([]);
 
 // Create writable stores for popular, trending, and top-rated shows
-export const popularShows = writable<any[]>([]);
-export const trendingShows = writable<any[]>([]);
-export const topRatedShows = writable<any[]>([]);
+export const popularShows = writable<Movie[]>([]);
+export const trendingShows = writable<Movie[]>([]);
+export const topRatedShows = writable<Movie[]>([]);
 
 
 
 
-// Interface for the card state
-interface CardState {
-  isHovered: boolean;
-  cardId: number | string|null;
-  position: { x: number; y: number };
-  dimensions: { width: number; height: number };
-  content: { title: string; description: string; poster_path: string } | null;
-  item: null | Movie;
-}
+
 
 // Create a writable store for the card state
 export const cardState = writable<CardState>({
@@ -43,15 +35,7 @@ export const cardState = writable<CardState>({
   content: null,
 });
 
-// Modal State Interface
-interface ModalState {
-  isOpen: boolean;
-  videoId: string;
-  movieId: string;
-  movieData: MovieDetails | null;
-  loading: boolean;
-  error: string | null;
-}
+
 
 // Initial Modal State
 const initialState: ModalState = {
