@@ -51,7 +51,7 @@ export const getMoviesByGenre = async (fetchFn: typeof fetch, id: string): Promi
     return data?.results.map(mapToMovie) || [];
 };
 export async function getMovieTrailer(fetch: typeof window.fetch, movieId: number): Promise<Trailer> {
-    const response = await fetch(`${BASE_URL}/movie/${movieId}/videos?api_key=${import.meta.env.VITE_API_KEY}&language=en-US`);
+    const response = await fetch(`${BASE_URL}/movie/${movieId}/videos?api_key=${import.meta.env.VITE_TMDB_API_KEY}&language=en-US`);
     const data = await handleFetchResponse(response);
     // Assuming the first trailer is desired
     const trailer = data.results.find((video: any) => video.type === 'Trailer' && video.site === 'YouTube');
@@ -63,13 +63,13 @@ export async function getMovieTrailer(fetch: typeof window.fetch, movieId: numbe
 
 // Get Movie by ID
 export const getMovieById = async (fetchFn: typeof fetch, movieId: string | number): Promise<MovieDetails | null> => {
-    const response = await fetch(`${BASE_URL}/movie/${movieId}?api_key=${import.meta.env.VITE_API_KEY}&language=en-US`);
+    const response = await fetch(`${BASE_URL}/movie/${movieId}?api_key=${import.meta.env.VITE_TMDB_API_KEY}&language=en-US`);
     return handleFetchResponse(response);
 };
 
 // Fetch Similar Movies
 export async function getSimilarMovies(fetch: typeof window.fetch, movieId: number): Promise<Movie[]> {
-    const response = await fetch(`${BASE_URL}/movie/${movieId}/similar?api_key=${import.meta.env.VITE_API_KEY}&language=en-US&page=1`);
+    const response = await fetch(`${BASE_URL}/movie/${movieId}/similar?api_key=${import.meta.env.VITE_TMDB_API_KEY}&language=en-US&page=1`);
     const data = await handleFetchResponse(response);
     return data.results;
 }
