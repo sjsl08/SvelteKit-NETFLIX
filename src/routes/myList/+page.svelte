@@ -3,8 +3,8 @@
   import { onMount } from "svelte";
   import Card from "$lib/components/Card.svelte";
   import { browser } from "$app/environment";
-  import { favoriteListRefresh } from "$lib/store/globalState";
-  import type { Movie } from "$lib/types/tmdb";
+  import { favoriteListRefresh } from "$lib/store/GlobalState";
+  import type { Movie } from "$lib/types/typess";
 
   let movies: Movie[] = [];
 

@@ -3,44 +3,48 @@
   import { onMount, onDestroy } from "svelte";
   import { Play, Info, Volume2, VolumeOff } from "lucide-svelte";
   import {
-    popularShows
-  } from "$lib/store/globalState";
+    popularShows,
+
+    selectedMovie,
+
+    selectedMovieTrailer
+
+
+  } from "$lib/store/GlobalState";
   import { page } from "$app/stores";
   import Player from "./Player.svelte";
   import type PlayerComponent from "./Player.svelte";
-  import { openModal } from '$lib/store/globalState';
+  import { openModal } from '$lib/store/GlobalState';
   import { goto } from "$app/navigation";
-    import type { Movie, MovieDetails } from "../types/tmdb";
-    import { getMovieById, getMovieTrailer } from "../api/tmdb";
+    import type { Movie, MovieDetails } from "../types/types";
+    import { getMovieById, getMovieTrailer } from "../api/API"
+    import { fetchTrailer } from "$lib/utils/helpers";
 
  
 
  
   let id: string = "";
-  let movie: Movie | null = null;
+  let movie: MovieDetails | null = null;
   let trailerUrl: string = "";
-  let movieDetails: MovieDetails | null = null;
-  let isTvShowsRoute: boolean = false;
 
   // Reference to the Player component
   let playerRef: PlayerComponent | null = null;
   let isMutedPlayer1: boolean = true;
 
-  // Determine if current route is /tvShows
-  $: isTvShowsRoute = $page.url.pathname === "/tvShows";
+
 
   let unsubscribeShows: () => void;
-  let unsubscribeGenres: () => void;
+
 
   onMount(() => {
 
-      unsubscribeShows = popularShows.subscribe((shows) => {
-        if (shows.length > 0) {
-          const randomIndex = Math.floor(Math.random() * shows.length);
-          movie = shows[randomIndex];
-          fetchDetailsAndInitializePlayer(movie);
-        }
+      unsubscribeShows = selectedMovie.subscribe(async(data) => {
+        
+         movie = data
+         trailerUrl= await fetchTrailer(movie.id)
       });
+  
+
 
 
     // Cleanup subscriptions and destroy player
@@ -50,17 +54,7 @@
     };
   });
 
-  const  fetchDetailsAndInitializePlayer = async(selectedMovie: Movie)=> {
-   movieDetails=  await getMovieById(movie.id)
-
-   
-    const trailer= await getMovieTrailer(selectedMovie.id);
-
-    console.log(trailer);
-    
-    trailerUrl = `https://www.youtube.com/embed/${trailer.key}?enablejsapi=1&autoplay=1&loop=1&playlist=${trailer.key}&controls=0&modestbranding=1&iv_load_policy=3&cc_load_policy=0&rel=0&vq=hd2160`;
-
-  }
+ 
 
 
   const handleMute = () => {
@@ -89,7 +83,7 @@
   {#if !trailerUrl && movie}
     <img
       src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-      alt={movie.title || movie.name}
+      alt={movie.title}
       class="h-screen w-full object-cover absolute inset-0"
     />
   {/if}
@@ -104,24 +98,24 @@
   {#if movie}
     <div class="absolute top-[45%] pl-12 w-full z-10">
       <h1 class="text-4xl md:text-6xl font-bold mb-4 text-white">
-        {movie.title || movie.name}
+        {movie.title }
       </h1>
       <p class="text-sm md:text-lg hidden  md:block mb-6 max-w-lg text-gray-300">
 
-        {movieDetails ? movieDetails.overview?.substring(0,150) + "..." : movie.overview?.substring(0,150) + "..."}
+        {movie.overview?.substring(0,150) + "..."}
       </p>
       <div class="flex flex-wrap items-center space-x-4 space-y-2 md:space-y-0">
 
         <div class="flex gap-4">
 
           <!-- Play Button -->
-          <button on:click={goto(`/watch/${movie.id}`)} class="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-md hover:bg-gray-200 transition">
+          <button on:click={()=>{goto(`/watch/${movie.id}`)}} class="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-md hover:bg-gray-200 transition">
             <Play size={20} />
             <span class="font-semibold">Play</span>
           </button>
           
           <!-- More Info Button -->
-          <button on:click={()=>{openModal(trailerUrl,movieDetails?.id  )}} class="flex items-center gap-2 bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition">
+          <button on:click={()=>{openModal(trailerUrl,movie?.id  )}} class="flex items-center gap-2 bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition">
             <Info size={20} />
             <span class="font-semibold">More Info</span>
           </button>

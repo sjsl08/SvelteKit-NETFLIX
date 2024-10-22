@@ -1,7 +1,7 @@
-import { cardState, favoriteListRefresh } from "$lib/store/globalState";
+import { cardState, favoriteListRefresh } from "$lib/store/GlobalState";
 import { get } from "svelte/store";
 import fallbackImage from "../../public/images/404.jpg"
-import type { Movie } from "$lib/types/tmdb";
+import type { Movie } from "$lib/types/types";
 
 
 export const addToList = (movie: Movie) => {
@@ -60,7 +60,7 @@ export const addToList = (movie: Movie) => {
 
 
 
-export const convertMinutesToTime=(minutes: number)=> {
+export const convertMinutesToTime = (minutes: number) => {
   const hours = Math.floor(minutes / 60); // Calculate whole hours
   const mins = minutes % 60; // Calculate remaining minutes
   return hours === 0 ? `${mins}m` : `${hours}h ${mins}m`;
@@ -68,9 +68,40 @@ export const convertMinutesToTime=(minutes: number)=> {
 
 
 
-export const handleNoImageError = (event: Event)=> {
+export const handleNoImageError = (event: Event) => {
   const img = event.target as HTMLImageElement;
   if (img.src !== fallbackImage) {
     img.src = fallbackImage;
   }
+}
+
+export const fetchTrailer = async (id: number | string) => {
+  try {
+
+    const response = await fetch(`/api/movies/${id}/trailer`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Server responded with error:', errorData.error);
+      throw new Error(errorData.error || 'Failed to fetch trailer.');
+    }
+
+    const data = await response.json();
+    console.log('Server response data:', data);
+
+    if (data.trailer && data.trailer.key) {
+      return data.trailer.key;
+    } else {
+      console.warn('No trailer found in the response.');
+    }
+  } catch (err: any) {
+    console.error('Failed to fetch trailer:', err);
+  }
+
+
 }

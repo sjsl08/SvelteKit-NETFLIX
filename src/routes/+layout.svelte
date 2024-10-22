@@ -1,7 +1,7 @@
 <script lang="ts">
   import PopupCard from "$lib/components/PopupCard.svelte";
   import "../app.css";
-  import { cardState } from "$lib/store/globalState";
+  import { cardState } from "$lib/store/GlobalState";
   import Modal from "$lib/components/Modal.svelte";
   import Header from "$lib/components/Header.svelte";
   import Player from "$lib/components/Player.svelte";
@@ -18,5 +18,4 @@
   x={$cardState.position.x}
   y={$cardState.position.y + 250}
   isHovered={$cardState.isHovered}
-  dimensions={$cardState.dimensions}
 />

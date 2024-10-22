@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { cardState } from "$lib/store/globalState";
+  import { cardState } from "$lib/store/GlobalState";
   import { onDestroy } from "svelte";
 
-  import type { Movie } from "$lib/types/tmdb";
+  import type { Movie } from "$lib/types/typess";
   import { handleNoImageError } from "$lib/utils/helpers";
   export let item: Movie;
 
@@ -37,7 +37,7 @@
     }
 
     // Set a new timeout to update the store after debounceDelay
-    hoverTimeout = window.setTimeout(() => {
+ 
       cardState.update((state) => ({
         ...state,
         item,
@@ -48,7 +48,7 @@
       }));
       hoverTimeout = undefined;
       console.log("Card State Updated:", $cardState);
-    }, debounceDelay);
+
   };
 
   const handleUnhover = () => {

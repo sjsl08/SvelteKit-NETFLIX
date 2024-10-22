@@ -1,14 +1,14 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
   import { ChevronDown, Play, Plus, Check, ThumbsUp } from "lucide-svelte";
-  import { cardState, openModal } from "$lib/store/globalState";
-  import { getMovieTrailer } from "$lib/api/tmdb";
+  import { cardState, openModal } from "$lib/store/GlobalState";
+  import { getMovieTrailer } from "$lib/api/API"
   import { browser } from "$app/environment";
   import { Volume2, VolumeOff } from "lucide-svelte";
-  import { addToList, handleNoImageError } from "$lib/utils/helpers";
+  import { addToList, fetchTrailer, handleNoImageError } from "$lib/utils/helpers";
   import Player from "./Player.svelte";
   import { goto } from "$app/navigation";
-  import type { Movie } from "$lib/types/tmdb";
+  import type { Movie } from "$lib/types/types";
   import { get } from "svelte/store";
 
   export let x: number = 0;
@@ -34,11 +34,11 @@
   // Subscribe to cardState to get image URL
   cardState.subscribe((data) => {
     if (data.item) {
-      imageUrl = data.item.image;
+      imageUrl =`https://image.tmdb.org/t/p/w500${data.item.poster_path}`;
       movieID = data.item.id;
       title = data.item.title;
       favData = data.item;
-      console.log(favData);
+      console.log(imageUrl);
 
       allList = JSON.parse(localStorage.getItem("list")!);
 
@@ -55,22 +55,21 @@
   });
 
 
+ 
+
+
 
   onMount(async() => {
     if (browser) {
       // Initial fetch if item exists
       if (cardState && get(cardState).item) {
-       const trailerResponse =  await getMovieTrailer(get(cardState).item.id);
-
-       trailerUrl = trailerResponse.key
+      trailerUrl = await fetchTrailer(get(cardState).item.id)
       }
 
       // Subscribe to changes in cardState
       unsubscribe = cardState.subscribe(async(state) => {
         if (state.item?.id) {
-          const trailerResponse =  await getMovieTrailer(get(cardState).item.id);
-
-       trailerUrl = trailerResponse.key
+        trailerUrl=  await fetchTrailer(get(cardState).item.id)
         } else {
           trailerUrl = "";
         }

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ChevronLeft, ChevronRight } from "lucide-svelte";
   import Card from "./Card.svelte";
-  import type { Movie } from "$lib/types/tmdb";
+  import type { Movie } from "$lib/types/typess";
   
   // Define props with types
   export let title: string = "";

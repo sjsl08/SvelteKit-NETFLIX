@@ -1,9 +1,8 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { closeModal } from "$lib/store/globalState";
-  import type { Movie } from "$lib/utils/helpers";
-  import { addToList, handleNoImageError } from "$lib/utils/helpers";
-  import { Check, Plus, Play } from "lucide-svelte";
+  import { closeModal } from "$lib/store/GlobalState";
+  import { handleNoImageError } from "$lib/utils/helpers";
+  import { Play } from "lucide-svelte";
 
   export let id = "";
   export let title = "Airport 1975";
@@ -14,7 +13,6 @@
     "When an in-flight collision incapacitates the pilots of an airplane bound for Los Angeles,...";
   export let duration = "22m";
   export let imageUrl = "path/to/your/image.jpg";
-  let added = false;
 
 </script>
 
