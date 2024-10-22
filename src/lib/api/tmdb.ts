@@ -1,6 +1,6 @@
 // src/lib/api/tmdb.ts
 
-import type { Genre, MediaItem, Movie, MovieDetails, TMDBConfig, TMDBResponse } from "$lib/types/tmdb";
+import type { Genre, Movie, MovieDetails, TMDBConfig, TMDBResponse } from "$lib/types/tmdb";
 
 const API_KEY = '920a7b538bfb15120fe9dc6ced7735b0';  // Replace with your actual API key
 const BASE_URL = 'https://api.themoviedb.org/3';
@@ -23,7 +23,7 @@ export const getTMDBConfig = async (fetch: (url: string) => Promise<Response>): 
 
 // Movies
 
-export const fetchPopularShows = async (fetch: (url: string) => Promise<Response>): Promise<MediaItem[]> => {
+export const fetchPopularShows = async (fetch: (url: string) => Promise<Response>): Promise<Movie[]> => {
     const url = `${BASE_URL}/movie/popular?api_key=${API_KEY}`;
     try {
         const response = await fetch(url);
@@ -43,7 +43,7 @@ export const fetchPopularShows = async (fetch: (url: string) => Promise<Response
     }
 };
 
-export const fetchTrendingShows = async (fetch: (url: string) => Promise<Response>): Promise<MediaItem[]> => {
+export const fetchTrendingShows = async (fetch: (url: string) => Promise<Response>): Promise<Movie[]> => {
     const url = `${BASE_URL}/trending/movie/week?api_key=${API_KEY}`;
     try {
         const response = await fetch(url);
@@ -63,7 +63,7 @@ export const fetchTrendingShows = async (fetch: (url: string) => Promise<Respons
     }
 };
 
-export const fetchTopRatedShows = async (fetch: (url: string) => Promise<Response>): Promise<MediaItem[]> => {
+export const fetchTopRatedShows = async (fetch: (url: string) => Promise<Response>): Promise<Movie[]> => {
     const url = `${BASE_URL}/movie/top_rated?api_key=${API_KEY}`;
     try {
         const response = await fetch(url);
@@ -101,7 +101,7 @@ export const getGenres = async (fetch: (url: string) => Promise<Response>): Prom
 export const getMoviesByGenre = async (
     fetch: (url: string) => Promise<Response>,
     id: string
-): Promise<MediaItem[]> => {
+): Promise<Movie[]> => {
     const url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${id}&page=1`;
     try {
         const response = await fetch(url);
@@ -166,7 +166,7 @@ export const getMovieById = async (
 // Similar Movies
 export const getSimilarMovies = async (
     movieId: number
-): Promise<MediaItem[]> => {
+): Promise<Movie[]> => {
     const url = `${BASE_URL}/movie/${movieId}/similar?api_key=${API_KEY}&page=1`;
     try {
         const response = await fetch(url);
@@ -190,7 +190,7 @@ export const getSimilarMovies = async (
 export const searchMovies = async (
     keyword: string,
     page: number = 1
-): Promise<MediaItem[]> => {
+): Promise<Movie[]> => {
     if (!keyword.trim()) {
         return [];
     }

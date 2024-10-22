@@ -5,7 +5,7 @@ interface Movie {
   title?: string;
   name?: string;
   poster_path: string;
-  overview: string;
+  overview?: string;
 }
 
 
@@ -14,13 +14,12 @@ interface Video {
   type: string;
 }
 
-interface MediaItem {
-  id: number;
-  title?: string; // Used for Movies
-  name?: string;  // Used for TV Shows
-  image: string;
-  poster_path: string;
+interface MovieWithGenere {
+  movies : Movie[];
+  id:string;
+  name:string;
 }
+
 
 
 interface TMDBConfig {

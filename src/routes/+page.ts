@@ -1,6 +1,7 @@
     // src/routes/+page.ts
     import { fetchPopularShows, fetchTrendingShows, fetchTopRatedShows, getTMDBConfig, getGenres, getMoviesByGenre } from '$lib/api/tmdb';
     import { popularShows, trendingShows, topRatedShows, config, moviesWithGenre } from '$lib/store/globalState';
+import type { Genre, MovieWithGenere } from '$lib/types/tmdb';
 
     export async function load({ fetch }) {
         try {
@@ -14,12 +15,12 @@
             ]);
 
 
-            const moviesByGenres = await Promise.all(
-                genresRespones.map(async (genre:{id:string,name:string}) => {
-                    const movies = await getMoviesByGenre(fetch, genre.id);
-                    return { id: genre.id, name: genre.name, movies };
+            const moviesByGenres: MovieWithGenere[] = await Promise.all(
+                genresRespones.map(async (genre: Genre) => {
+                  const movies = await getMoviesByGenre(fetch, genre.id.toString()); // Convert number to string
+                  return { id: genre.id.toString(), name: genre.name, movies };
                 })
-            );
+              );
 
             
             moviesWithGenre.set(moviesByGenres)
