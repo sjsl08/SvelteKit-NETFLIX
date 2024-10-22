@@ -63,7 +63,7 @@
   <HeroSection />
 
   <!-- Conditionally render Carousel components when data is available -->
-  {#if popular.length > 0 && trending.length > 0 && topRated.length > 0}
+  {#if popular?.length > 0 && trending?.length > 0 && topRated?.length > 0}
       <div class="absolute w-full top-[35vh] md:top-[65vh] lg:top-[85vh] pl-10 flex flex-col space-y-4">
           <Carousel title="Popular Shows" items={popular} />
           <div>
